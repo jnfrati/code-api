@@ -1,0 +1,33 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "Sistema de correccion de guias",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrupoETICUndec/CODE.git"
+  },
+  "keywords": [
+    "competitive",
+    "programming"
+  ],
+  "author": "Frati Jose Nicolas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GrupoETICUndec/CODE/issues"
+  },
+  "homepage": "https://github.com/GrupoETICUndec/CODE#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.1.1",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.9",
+    "nodemon": "^1.18.9"
+  }
+}
