@@ -3,6 +3,7 @@ const {buildSchema} = require('graphql');
 module.exports = buildSchema(`
     type Solution{
         _id: ID!
+        owner: User!
         problem: Problem!
         source_code: String!
         language: Int!

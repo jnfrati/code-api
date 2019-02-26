@@ -1,5 +1,5 @@
 const https = require('https')
-module.exports = async (problem, user, solution)=>{
+module.exports = async (problem, solution)=>{
 
         var options = {
             'method': 'POST',
@@ -47,9 +47,9 @@ module.exports = async (problem, user, solution)=>{
                 }
               })
               console.log(error);
-              user.solutions.id(solution._id).success = success;
-              user.solutions.id(solution._id).error = error;
-              user.save()              
+              solution.success = success;
+              solution.error = error;
+              solution.save()              
             });
 
         }).on("error", err => {
@@ -59,5 +59,4 @@ module.exports = async (problem, user, solution)=>{
         request.write(JSON.stringify(postData));
 
         request.end();
-        return user.solutions.id(solution._id);
 }

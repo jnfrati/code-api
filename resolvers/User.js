@@ -1,9 +1,7 @@
 const User = require('../models/UserModel');
-const Problem = require('../models/ProblemModel')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongoose').Types.ObjectId;
-const judge0Request = require('../judge/requests');
 const {key} = require('../config')
 
 module.exports = {
@@ -64,50 +62,4 @@ module.exports = {
             throw err;
         }
     },
-    solutions: async(args, req)=>{
-        try{
-            if(!req.isAuth){
-                throw new Error('Unauthenticated')
-            }
-            user = await User.findById(ObjectId(req.userId))
-            return user.solutions
-        }catch (err){
-            throw err;
-        }
-    },
-    // sendSolution(problemName: String!, solutionInput: SolutionInput): Solution!
-    sendSolution: async({problemName, solutionInput},req)=>{
-        try{
-            if(!req.isAuth){
-                throw new Error('Unauthenticated')
-            }
-            user = await User.findById(ObjectId(req.userId))
-            problem = await Problem.findOne({name: problemName})
-            // type Solution{
-            //     _id: ID!
-            //     problem: Problem!
-            //     source_code: String!
-            //     language: Int!
-            //     success: Boolean
-            //     error: String        
-            // }
-            // input SolutionInput{
-            //     source_code: String!
-            //     language: Int!
-            // }
-
-            solution = {
-                problem: problem._id,
-                source_code: solutionInput.source_code,
-                language: solutionInput.language
-            }
-            user.solutions.push(solution)
-            user.save()
-            solution = user.solutions[user.solutions.length - 1]
-            judge0Request(problem, user, solution)
-            return solution 
-        }catch(err){
-            throw err;
-        }
-    }
 }
