@@ -5,7 +5,7 @@ const rootValue = require('./resolvers/index')
 // const queries = require('./schema/resolvers/queries')
 // const mutations = require('./schema/resolvers/mutations')
 const isAuth = require('./middleware/is-auth')
-
+const cors = require('cors')
 
 
 
@@ -13,6 +13,7 @@ const isAuth = require('./middleware/is-auth')
 const mongoose = require('mongoose')
 
 var app = express();
+app.use(cors());
 
 app.use(isAuth);
 
