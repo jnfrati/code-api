@@ -2,12 +2,12 @@ const Problem = require('../models/ProblemModel')
 const User = require('../models/UserModel')
 const ObjectId = require('mongoose').Types.ObjectId;
 module.exports = {
-    addNewProblem: async ({name, description}, req)=>{
+    addNewProblem: async ({name, description}, context)=>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
-            user = await User.findById(ObjectId(req.userId))
+            user = await User.findById(ObjectId(context.req.userId))
             if(!user.isAdmin){
                 throw new Error('Not admin!')
             }
@@ -27,12 +27,12 @@ module.exports = {
             throw err;
         }
     },
-    addTestCase: async ({problemName, input, output},req)=>{
+    addTestCase: async ({problemName, input, output},context)=>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
-            user = await User.findById(ObjectId(req.userId))
+            user = await User.findById(ObjectId(context.req.userId))
             if(!user.isAdmin){
                 throw new Error('Not admin!')
             }
@@ -43,9 +43,9 @@ module.exports = {
             throw err;
         }
     },
-    problems: async (args, req) =>{
+    problems: async (args, context) =>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
             return Problem.find().populate('owner');
@@ -53,9 +53,9 @@ module.exports = {
             throw err;
         }
     },
-    problem: async ({name}, req) =>{
+    problem: async ({name}, context) =>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
             return Problem.findOne({name}).populate('owner');

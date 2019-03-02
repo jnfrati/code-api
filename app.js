@@ -6,6 +6,9 @@ const rootValue = require('./resolvers/index')
 // const mutations = require('./schema/resolvers/mutations')
 const isAuth = require('./middleware/is-auth')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
+
+
 
 
 
@@ -13,15 +16,31 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 
 var app = express();
-app.use(cors());
+// enable cors
+var corsOptions = 
+{
+  origin: 'http://localhost:4200',
+  credentials: true // <-- REQUIRED backend setting
+};
+app.use(cors(corsOptions));
 
+app.use(cookieParser())
 app.use(isAuth);
 
-app.use('/graphql', graphQLHTTP({
-  schema,
-  rootValue,
-  graphiql: true,
-}))
+app.use('/graphql', (req, res) => {
+  return graphQLHTTP({
+    schema,
+    rootValue,
+    graphiql: true, // or whatever you want
+    context: { req, res },
+  })(req, res);
+}
+);
+// app.use('/graphql', graphQLHTTP({
+//   schema,
+//   rootValue,
+//   graphiql: true,
+// }))
 
 //mongoose.connect("mongodb://ds229878.mlab.com:29878/gql-jnfrati", {
 mongoose.connect("mongodb://localhost:27017/gql-jnfrati",{

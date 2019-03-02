@@ -3,21 +3,21 @@ const judge0Request = require('../judge/requests')
 const Solution = require('../models/SolutionModel')
 const ObjectId = require('mongoose').Types.ObjectId;
 module.exports = {
-    solutions: async(args, req)=>{
+    solutions: async(args, context)=>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
-            solutions = await Solution.find({owner: ObjectId(req.userId)}).populate('owner').populate('problem')
+            solutions = await Solution.find({owner: ObjectId(context.req.userId)}).populate('owner').populate('problem')
             return solutions
         }catch (err){
             throw err;
         }
     },
     // sendSolution(problemName: String!, solutionInput: SolutionInput): Solution!
-    sendSolution: async({problemName, solutionInput},req)=>{
+    sendSolution: async({problemName, solutionInput},context)=>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
             problem = await Problem.findOne({name: problemName})
@@ -35,7 +35,7 @@ module.exports = {
             // }
 
             solution = new Solution({
-                owner: req.userId,
+                owner: context.req.userId,
                 problem: problem._id,
                 source_code: solutionInput.source_code,
                 language: solutionInput.language

@@ -2,12 +2,17 @@ const jwt = require('jsonwebtoken');
 const {key} = require('../config');
 console.log(key);
 module.exports = (req, res, next) => {
-  const authHeader = req.get('Authorization');
-  if (!authHeader) {
-    req.isAuth = false;
-    return next();
-  }
-  const token = authHeader.split(' ')[1];
+  
+  // By authorization header
+  // const authHeader = req.get('Authorization');
+  // if (!authHeader) {
+  //   req.isAuth = false;
+  //   return next();
+  // }
+  
+
+  // By Cookie Authorization
+  const token = req.cookies.token;
   if (!token || token === '') {
     req.isAuth = false;
     return next();
@@ -23,6 +28,9 @@ module.exports = (req, res, next) => {
     req.isAuth = false;
     return next();
   }
+
+
+
   req.isAuth = true;
   req.userId = decodedToken.userId;
   next();

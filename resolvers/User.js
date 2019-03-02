@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongoose').Types.ObjectId;
 const {key} = require('../config')
+const cookieSetter = require('../middleware/cookie')
 
 module.exports = {
     registerUser: async (args)=>{
@@ -24,14 +25,14 @@ module.exports = {
                 expiresIn: '1h'
                 }
             );
-            //Poblado y devolucion del nuevo usuario para corresponder con el esquema de GraphQL
-            return {userId: results._id, token, tokenExpiration: 1};
+            return cookieSetter(context.res, context.req, token)
         }catch(err){
             throw err;
         }
     },
     //LOGIN 
-    login: async ({input})=>{
+    login: async ({input}, context)=>{
+        
         try{
             const user = await User.findOne({username: input.username});
             if(!user)
@@ -46,14 +47,16 @@ module.exports = {
                 expiresIn: '1h'
                 }
             );
-            return { userId: user.id, token: token, tokenExpiration: 1 };
+            return {
+                logged: cookieSetter(context.res, context.req, token)
+            }
         }catch(err){
             throw err;
         }
     },
-    user: async(args,req)=>{
+    user: async(args,context)=>{
         try{
-            if(!req.isAuth){
+            if(!context.req.isAuth){
                 throw new Error('Unauthenticated')
             }
             user = await User.findById(ObjectId(req.userId))
